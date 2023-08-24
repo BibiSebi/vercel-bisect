@@ -16,7 +16,7 @@ export async function GET(request: Request, response: Response) {
 }
 
 // @ts-ignore
-export const getPaginatedDeployments = async (since: string, until: string) => {
+const getPaginatedDeployments = async (since: string, until: string) => {
   const deploymentsRes = await fetchDeployments(since, until);
 
   if (!deploymentsRes.deployments) {
@@ -36,7 +36,6 @@ export const getPaginatedDeployments = async (since: string, until: string) => {
   return [...deploymentsRes.deployments, ...nextDeployments];
 };
 
-//TODO: remove project id
 const fetchDeployments = (since: string, until: string) => {
   const token = cookies().get("vercel");
   return fetch(
