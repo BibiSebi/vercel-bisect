@@ -6,7 +6,7 @@ export async function GET(request: Request, response: Response) {
   return NextResponse.json(projects);
 }
 
-export const getProjects = () => {
+const getProjects = () => {
   const token = cookies().get("vercel");
   return fetch(`https://api.vercel.com/v9/projects`, {
     headers: {
