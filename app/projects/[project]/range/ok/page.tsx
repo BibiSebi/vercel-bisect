@@ -1,19 +1,15 @@
 "use client";
+
 import { Deployment } from "@/lib/vercel";
 import Link from "next/link";
 import { ChangeEventHandler, useEffect, useState } from "react";
 
-export default function RangeBad({
-  params,
-}: {
-  params: { deployment: string };
-}) {
+export default function Range({ params }: { params: { project: string } }) {
   const [deployments, setDeployments] = useState<Deployment[]>([]);
-  const [brokenDeployment, setBrokenDeployment] = useState<string>();
+  const [okDeployment, setOkDeployment] = useState<string>();
 
   useEffect(() => {
-    console.log({ params });
-    fetch(`/api/vercel/deployments?since=${params.deployment}`).then(
+    fetch(`/api/vercel/projects/${params.project}/deployments`).then(
       async (response) => {
         const data = (await response.json()) as Deployment[];
         setDeployments(data);
@@ -22,16 +18,16 @@ export default function RangeBad({
   }, []);
 
   const onOptionChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setBrokenDeployment(e.target.value);
+    setOkDeployment(e.target.value);
   };
 
   return (
     <>
       <nav className="p-4">
-        <Link href={"/range/ok"}>{"<-"} Go Back</Link>
+        <Link href={"/"}>{"<-"} Go Back</Link>
       </nav>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <h1 className="text-4xl mb-4">Select first broken Deployment</h1>
+        <h1 className="text-4xl mb-4">Select last working Deployment</h1>
         {deployments && (
           <ol>
             {deployments.map((deployment, index) => {
@@ -69,11 +65,11 @@ export default function RangeBad({
                       type="radio"
                       id={`${deployment.createdAt}`}
                       value={deployment.createdAt}
-                      checked={brokenDeployment === `${deployment.createdAt}`}
+                      checked={okDeployment === `${deployment.createdAt}`}
                       onChange={onOptionChange}
                       name="isOkRadio"
                     />
-                    <label htmlFor={`${deployment.createdAt}`}>Broken</label>
+                    <label htmlFor={`${deployment.createdAt}`}>Ok</label>
                   </div>
                 </li>
               );
@@ -81,12 +77,12 @@ export default function RangeBad({
           </ol>
         )}
 
-        {brokenDeployment && (
+        {okDeployment && (
           <Link
-            href={`/bisect?ok=${params.deployment}&bad=${brokenDeployment}`}
+            href={`/projects/${params.project}/range/ok/${okDeployment}/bad`}
           >
             <button className="bg-white p-2 rounded-md text-black">
-              Go to bisect view
+              Go to select broken deployment
             </button>
           </Link>
         )}

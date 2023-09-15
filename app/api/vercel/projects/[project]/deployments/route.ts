@@ -4,22 +4,34 @@ import { NextResponse } from "next/server";
 
 // since: Get Deployments created after this JavaScript timestamp. (bad)
 // until: Get Deployments created before this JavaScript timestamp. (good)
-export async function GET(request: Request, response: Response) {
+export async function GET(
+  request: Request,
+  { params }: { params: { project: string } },
+) {
   const { searchParams } = new URL(request.url);
   const until = searchParams.get("until") || undefined;
   const since = searchParams.get("since") || undefined;
 
-  const deployments = await getPaginatedDeployments(until, since);
+  const deployments = await getPaginatedDeployments(
+    params.project,
+    until,
+    since,
+  );
 
   return NextResponse.json(deployments);
 }
 
-type GetPaginatedDeployments = (until?: string, since?: string) => Promise<any>;
+type GetPaginatedDeployments = (
+  project: string,
+  until?: string,
+  since?: string,
+) => Promise<any>;
 const getPaginatedDeployments: GetPaginatedDeployments = async (
+  project,
   until,
   since,
 ) => {
-  const deploymentsRes = await fetchDeployments(until, since);
+  const deploymentsRes = await fetchDeployments(project, until, since);
 
   if (deploymentsRes.pagination?.next) {
     const nextDeployments = await getPaginatedDeployments(
@@ -34,12 +46,13 @@ const getPaginatedDeployments: GetPaginatedDeployments = async (
 };
 
 type FetchDeployments = (
+  project: string,
   until?: string,
   since?: string,
 ) => Promise<DeploymentsResponse>;
-const fetchDeployments: FetchDeployments = (until, since) => {
+const fetchDeployments: FetchDeployments = (project, until, since) => {
   const token = cookies().get("vercel");
-  const url = "https://api.vercel.com/v6/deployments?limit=100&state=READY";
+  const url = `https://api.vercel.com/v6/deployments?limit=100&state=READY&projectId=${project}`;
 
   console.log(
     `${url}${until ? "&until=" + until : ""}${since ? "&since=" + since : ""}`,
