@@ -82,7 +82,9 @@ export default function RangeBad({
         )}
 
         {brokenDeployment && (
-          <Link href={`/range/ok/${params.deployment}/bad/${brokenDeployment}`}>
+          <Link
+            href={`/bisect?ok=${params.deployment}&bad=${brokenDeployment}`}
+          >
             <button className="bg-white p-2 rounded-md text-black">
               Go to bisect view
             </button>

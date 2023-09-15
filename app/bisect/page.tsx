@@ -1,9 +1,17 @@
 "use client";
 
+import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 //TODO: test if user selects first bad commit
 export default function Bisect() {
+  const searchParams = useSearchParams();
+
+  const params = { ok: searchParams.get("ok"), bad: searchParams.get("bad") };
+
+  if (!params.ok || !params.bad) {
+    redirect("/range/ok");
+  }
   const [deployments, setDeployments] = useState<any[] | undefined>(undefined);
   const [currentDeployment, setCurrentDeployment] = useState<any | undefined>(
     undefined,
@@ -11,7 +19,7 @@ export default function Bisect() {
 
   useEffect(() => {
     fetch(
-      `http://localhost:3000/api/vercel/deployments?until=1694776270198&since=1694771998995`,
+      `http://localhost:3000/api/vercel/deployments?until=${params.bad}&since=${params.ok}`,
     )
       .then((res) => res.json())
       .then((deployments) => {
