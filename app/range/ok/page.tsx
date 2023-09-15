@@ -59,7 +59,7 @@ export default function Range() {
                     {new Date(deployment.createdAt).toTimeString()}
                   </div>
                   <div>{deployment.meta.githubCommitRef}</div>
-                  <div>{deployment.meta.githubCommitSha}</div>
+                  <div>{deployment.meta.githubCommitMessage}</div>
                   <div>
                     <input
                       type="radio"

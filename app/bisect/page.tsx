@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+//TODO: test if user selects first bad commit
 export default function Bisect() {
   const [deployments, setDeployments] = useState<any[] | undefined>(undefined);
   const [currentDeployment, setCurrentDeployment] = useState<any | undefined>(
@@ -9,7 +10,9 @@ export default function Bisect() {
   );
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/vercel/deployments")
+    fetch(
+      `http://localhost:3000/api/vercel/deployments?until=1694776270198&since=1694771998995`,
+    )
       .then((res) => res.json())
       .then((deployments) => {
         setDeployments(deployments);
@@ -75,17 +78,29 @@ export default function Bisect() {
           />
           <div>
             <button
-              onClick={() => clickGood()}
+              onClick={() => clickBad()}
               className="border border-1 border-pink-500 p-2"
             >
               Good
             </button>
             <button
-              onClick={() => clickBad()}
+              onClick={() => clickGood()}
               className="border border-1 border-pink-500 p-2"
             >
               Bad
             </button>
+
+            {currentDeployment && (
+              <span>Current {currentDeployment.meta.githubCommitMessage}</span>
+            )}
+            <div className="flex flex-col">
+              {deployments &&
+                deployments.map((deployment) => (
+                  <span key={deployment.id}>
+                    {deployment.meta.githubCommitMessage}
+                  </span>
+                ))}
+            </div>
           </div>
         </div>
       )}
