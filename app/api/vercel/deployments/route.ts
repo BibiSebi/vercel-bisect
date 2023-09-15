@@ -4,11 +4,9 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request, response: Response) {
   const { searchParams } = new URL(request.url);
-  const next = searchParams.get("next");
+  const next = searchParams.get("next") || undefined;
 
-  console.log({ next, searchParams });
-
-  const deployments = await getPaginatedDeployments(next || undefined);
+  const deployments = await getPaginatedDeployments(next);
 
   return NextResponse.json(deployments);
 }
