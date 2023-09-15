@@ -24,9 +24,9 @@ export default function Range({ params }: { params: { project: string } }) {
   return (
     <>
       <nav className="p-4">
-        <Link href={"/"}>{"<-"} Go Back</Link>
+        <Link href={"/projects"}>{"<-"} Go Back</Link>
       </nav>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <main className="flex min-h-screen flex-col items-center p-24">
         <h1 className="text-4xl mb-4">Select last working Deployment</h1>
         {deployments && (
           <ol>

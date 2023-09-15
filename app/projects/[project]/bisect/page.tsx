@@ -73,7 +73,9 @@ export default function Bisect({ params }: { params: { project: string } }) {
 
   return (
     <main className="flex w-screen flex-col h-screen">
-      <Link href="/">{"<-"} Go Back Home</Link>
+      <nav className="p-4">
+        <Link href="/">{"<-"} Go Back Home</Link>
+      </nav>
       {currentDeployment && (
         <div className={"flex flex-1 flex-col"}>
           {currentDeployment && (
@@ -118,7 +120,7 @@ export default function Bisect({ params }: { params: { project: string } }) {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="className={`m-0 max-w-[30ch] text-sm opacity-50`}"
+                  className="m-0 underline max-w-[30ch] text-sm opacity-50"
                   href={`https://github.com/${result.meta.githubCommitOrg}/${result.meta.githubCommitRepo}/commit/${result.meta.githubCommitSha}`}
                 >
                   {result.meta.githubCommitSha}

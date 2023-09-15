@@ -28,7 +28,9 @@ export default function RangeBad({
   return (
     <>
       <nav className="p-4">
-        <Link href={"/range/ok"}>{"<-"} Go Back</Link>
+        <Link href={`/projects/${params.project}/range/ok`}>
+          {"<-"} Go Back
+        </Link>
       </nav>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <h1 className="text-4xl mb-4">Select first broken Deployment</h1>
