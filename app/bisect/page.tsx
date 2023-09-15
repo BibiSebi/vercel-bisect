@@ -22,51 +22,43 @@ export default function Bisect() {
   }, []);
 
   const bisect = (deployments: any[]) => {
-    console.log(deployments);
-    const binarySearchIndex = Math.floor(deployments.length / 2);
-    console.log(binarySearchIndex);
-
+    const binarySearchIndex = getBinarySearchIndex(deployments.length);
     setCurrentDeployment(deployments[binarySearchIndex]);
   };
 
-  const clickGood = () => {
+  const getBinarySearchIndex = (length: number) => Math.floor(length / 2);
+
+  const markDeployment = (type: string) => {
     if (!deployments) {
       return;
     }
-    if (deployments.length === 1) {
-      console.log("done", deployments[0]);
-      return;
-    }
-    const binarySearchIndex = Math.floor(deployments.length / 2);
 
-    const restDeployments = deployments.slice(
-      binarySearchIndex,
-      deployments.length + 1,
-    );
-    console.log("good rest", restDeployments);
-    setDeployments(restDeployments);
-
-    bisect(restDeployments);
-  };
-
-  const clickBad = () => {
-    if (!deployments) {
-      return;
-    }
     if (deployments.length === 1) {
       console.log("done", deployments[0]);
       return;
     }
 
-    const binarySearchIndex = Math.floor(deployments.length / 2);
+    const binarySearchIndex = getBinarySearchIndex(deployments.length);
 
-    const restDeployments = deployments.slice(0, binarySearchIndex);
+    if (type === "good") {
+      const restDeployments = deployments.slice(0, binarySearchIndex);
+      setDeployments(restDeployments);
+      bisect(restDeployments);
+      return;
+    }
 
-    console.log("bad rest", restDeployments);
-    setDeployments(restDeployments);
+    if (type === "bad") {
+      const restDeployments = deployments.slice(
+        binarySearchIndex,
+        deployments.length + 1,
+      );
 
-    bisect(restDeployments);
+      setDeployments(restDeployments);
+      bisect(restDeployments);
+      return;
+    }
   };
+
   return (
     <main className="flex w-screen h-screen">
       {currentDeployment && (
@@ -78,13 +70,13 @@ export default function Bisect() {
           />
           <div>
             <button
-              onClick={() => clickBad()}
+              onClick={() => markDeployment("good")}
               className="border border-1 border-pink-500 p-2"
             >
               Good
             </button>
             <button
-              onClick={() => clickGood()}
+              onClick={() => markDeployment("bad")}
               className="border border-1 border-pink-500 p-2"
             >
               Bad
