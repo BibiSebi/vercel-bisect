@@ -19,9 +19,7 @@ const getPaginatedDeployments: GetPaginatedDeployments = async (
   until,
   since,
 ) => {
-  const deploymentsRes = await fetchDeployments(until);
-
-  console.log(deploymentsRes);
+  const deploymentsRes = await fetchDeployments(until, since);
 
   if (deploymentsRes.pagination?.next) {
     const nextDeployments = await getPaginatedDeployments(
@@ -43,7 +41,9 @@ const fetchDeployments: FetchDeployments = (until, since) => {
   const token = cookies().get("vercel");
   const url = "https://api.vercel.com/v6/deployments?limit=100&state=READY";
 
-  console.log(`${url}${until ? "&until=" + until : ""}`);
+  console.log(
+    `${url}${until ? "&until=" + until : ""}${since ? "&since=" + since : ""}`,
+  );
 
   //TODO: error handling
   return fetch(
