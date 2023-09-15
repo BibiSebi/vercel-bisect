@@ -1,6 +1,6 @@
 import { DeploymentsResponse } from "@/lib/vercel";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { getSession } from "@/app/api/vercel/utils/jwt";
 
 // since: Get Deployments created after this JavaScript timestamp. (bad)
 // until: Get Deployments created before this JavaScript timestamp. (good)
@@ -51,7 +51,7 @@ type FetchDeployments = (
   since?: string,
 ) => Promise<DeploymentsResponse>;
 const fetchDeployments: FetchDeployments = (project, until, since) => {
-  const token = cookies().get("vercel");
+  const session: any = getSession();
   const url = `https://api.vercel.com/v6/deployments?limit=100&state=READY&projectId=${project}`;
 
   console.log(
@@ -63,7 +63,7 @@ const fetchDeployments: FetchDeployments = (project, until, since) => {
     `${url}${until ? "&until=" + until : ""}${since ? "&since=" + since : ""}`,
     {
       headers: {
-        Authorization: `Bearer ${token?.value}`,
+        Authorization: `Bearer ${session.access_token}`,
       },
     },
   )

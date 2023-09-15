@@ -1,24 +1,14 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-
+import { setSession } from "@/app/api/vercel/utils/jwt";
 export async function GET(request: Request, response: Response) {
-  const { searchParams } = new URL(request.url);
-  const code = searchParams.get("code");
-
   try {
+    const { searchParams } = new URL(request.url);
+    const code = searchParams.get("code");
     if (code) {
-      const token = await getToken(code);
-
-      cookies().set({
-        name: "vercel",
-        value: token.access_token,
-        httpOnly: true,
-        path: "/",
-      });
+      const tokenResponse = await getToken(code);
+      setSession(tokenResponse);
     }
-
-    // TODO: save bearer token & redirect to the main
   } catch (e) {
     //TODO: redirect to 401
     console.log("error", e);

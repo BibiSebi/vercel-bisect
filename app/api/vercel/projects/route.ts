@@ -1,6 +1,6 @@
 import { ProjectResponse } from "@/lib/vercel";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { getSession } from "@/app/api/vercel/utils/jwt";
 
 //TODO Pagination on client side(?)
 export async function GET(request: Request, response: Response) {
@@ -10,10 +10,10 @@ export async function GET(request: Request, response: Response) {
 }
 
 const getProjects = (): Promise<ProjectResponse> => {
-  const token = cookies().get("vercel");
+  const session: any = getSession();
   return fetch(`https://api.vercel.com/v9/projects?limit=100`, {
     headers: {
-      Authorization: `Bearer ${token?.value}`,
+      Authorization: `Bearer ${session.access_token}`,
     },
   }).then((res) => res.json());
 };
