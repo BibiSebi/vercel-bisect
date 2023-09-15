@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import { redirect } from "next/navigation";
 import { setSession } from "@/app/api/vercel/utils/jwt";
+import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 export async function GET(request: Request, response: Response) {
   try {
     const { searchParams } = new URL(request.url);
@@ -24,7 +24,7 @@ const getToken = (code: string) =>
     headers: {
       "Content-Type": `application/x-www-form-urlencoded`,
     },
-    body: `client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${code}&redirect_uri=http://localhost:3000/api/vercel/callback`,
+    body: `client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`,
   }).then((res) => res.json());
 
 //Next steps:
