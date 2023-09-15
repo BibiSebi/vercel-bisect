@@ -41,7 +41,7 @@ type FetchDeployments = (
 ) => Promise<DeploymentsResponse>;
 const fetchDeployments: FetchDeployments = (until, since) => {
   const token = cookies().get("vercel");
-  const url = "https://api.vercel.com/v6/deployments?limit=100";
+  const url = "https://api.vercel.com/v6/deployments?limit=100&state=READY";
 
   console.log(`${url}${until ? "&until=" + until : ""}`);
 
