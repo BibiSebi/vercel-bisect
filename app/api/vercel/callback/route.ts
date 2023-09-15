@@ -24,7 +24,7 @@ const getToken = (code: string) =>
     headers: {
       "Content-Type": `application/x-www-form-urlencoded`,
     },
-    body: `client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`,
+    body: `client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}/api/vercel/callback`,
   }).then((res) => res.json());
 
 //Next steps:
