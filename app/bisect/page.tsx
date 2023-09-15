@@ -16,6 +16,7 @@ export default function Bisect() {
   const [currentDeployment, setCurrentDeployment] = useState<any | undefined>(
     undefined,
   );
+  const [result, setResult] = useState<any | undefined>(undefined);
 
   useEffect(() => {
     fetch(`/api/vercel/deployments?until=${params.bad}&since=${params.ok}`)
@@ -41,6 +42,7 @@ export default function Bisect() {
 
     if (deployments.length === 1) {
       console.log("done", deployments[0]);
+      setResult(deployments[0]);
       return;
     }
 
@@ -69,6 +71,9 @@ export default function Bisect() {
     <main className="flex w-screen h-screen">
       {currentDeployment && (
         <div className={"flex flex-1 flex-col"}>
+          {currentDeployment && (
+            <span>Current {currentDeployment.meta.githubCommitMessage}</span>
+          )}
           <iframe
             className="w-full h-full flex flex-1"
             referrerPolicy="no-referrer"
@@ -87,19 +92,22 @@ export default function Bisect() {
             >
               Bad
             </button>
-
-            {currentDeployment && (
-              <span>Current {currentDeployment.meta.githubCommitMessage}</span>
-            )}
-            <div className="flex flex-col">
-              {deployments &&
-                deployments.map((deployment) => (
-                  <span key={deployment.id}>
-                    {deployment.meta.githubCommitMessage}
-                  </span>
-                ))}
-            </div>
           </div>
+
+          {result && (
+            <div>
+              Result
+              <a target="_blank" href={`https://${result.url}`}>
+                {result.url}
+              </a>
+              {result.meta.githubCommitSha}
+              <a
+                href={`https://github.com/${result.meta.githubCommitOrg}/${result.meta.githubCommitRepo}/commit/${result.meta.githubCommitSha}`}
+              >
+                {result.meta.githubCommitSha}
+              </a>
+            </div>
+          )}
         </div>
       )}
     </main>
