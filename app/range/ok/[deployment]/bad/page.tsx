@@ -14,7 +14,7 @@ export default function RangeBad({
   useEffect(() => {
     console.log({ params });
     fetch(
-      `http://localhost:3000/api/vercel/deployments?next=${params.deployment}`,
+      `http://localhost:3000/api/vercel/deployments?until=${params.deployment}`,
     ).then(async (response) => {
       const data = (await response.json()) as Deployment[];
       setDeployments(data);
