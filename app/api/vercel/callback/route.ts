@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 
 export async function GET(request: Request, response: Response) {
   const { searchParams } = new URL(request.url);
@@ -19,11 +20,12 @@ export async function GET(request: Request, response: Response) {
 
     // TODO: save bearer token & redirect to the main
   } catch (e) {
+    //TODO: redirect to 401
     console.log("error", e);
     return NextResponse.json({});
   }
 
-  return NextResponse.json({});
+  redirect("/");
 }
 
 const getToken = (code: string) =>
