@@ -13,12 +13,12 @@ export default function RangeBad({
 
   useEffect(() => {
     console.log({ params });
-    fetch(
-      `http://localhost:3000/api/vercel/deployments?since=${params.deployment}`,
-    ).then(async (response) => {
-      const data = (await response.json()) as Deployment[];
-      setDeployments(data);
-    });
+    fetch(`/api/vercel/deployments?since=${params.deployment}`).then(
+      async (response) => {
+        const data = (await response.json()) as Deployment[];
+        setDeployments(data);
+      },
+    );
   }, []);
 
   const onOptionChange: ChangeEventHandler<HTMLInputElement> = (e) => {

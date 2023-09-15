@@ -9,12 +9,10 @@ export default function Range() {
   const [okDeployment, setOkDeployment] = useState<string>();
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/vercel/deployments").then(
-      async (response) => {
-        const data = (await response.json()) as Deployment[];
-        setDeployments(data);
-      },
-    );
+    fetch("/api/vercel/deployments").then(async (response) => {
+      const data = (await response.json()) as Deployment[];
+      setDeployments(data);
+    });
   }, []);
 
   const onOptionChange: ChangeEventHandler<HTMLInputElement> = (e) => {

@@ -18,9 +18,7 @@ export default function Bisect() {
   );
 
   useEffect(() => {
-    fetch(
-      `http://localhost:3000/api/vercel/deployments?until=${params.bad}&since=${params.ok}`,
-    )
+    fetch(`/api/vercel/deployments?until=${params.bad}&since=${params.ok}`)
       .then((res) => res.json())
       .then((deployments) => {
         setDeployments(deployments);
