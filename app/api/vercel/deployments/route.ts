@@ -13,8 +13,7 @@ export async function GET(request: Request, response: Response) {
     String(badDeployment),
     String(goodDeployment + 1),
   );
-  //GET all deployments of a project
-  const allDeployments = await getPaginatedDeployments();
+
   return NextResponse.json(deployments);
 }
 
@@ -30,6 +29,10 @@ const getPaginatedDeployments: GetPaginatedDeployments = async (
   }
 
   const deployments: any[] = deploymentsRes.deployments;
+
+  console.log(deployments);
+
+  return deployments;
 
   if (deploymentsRes.pagination.next === null) {
     return deployments;
@@ -65,14 +68,11 @@ const fetchDeployments: FetchDeployments = (since, until) => {
   //TODO: build query depending on the paramaters given
 
   //TODO: error handling
-  return fetch(
-    `https://api.vercel.com/v6/deployments?target=production&since=${since}&until=${until}&projectId=${projectId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token?.value}`,
-      },
+  return fetch(`https://api.vercel.com/v6/deployments`, {
+    headers: {
+      Authorization: `Bearer ${token?.value}`,
     },
-  )
+  })
     .then((res) => res.json())
     .catch((e) => console.log(e));
 };
